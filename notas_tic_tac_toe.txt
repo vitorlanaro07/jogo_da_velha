@@ -1,0 +1,33 @@
+ok, o que precisará ser feito?
+1 - eu preciso criar um vetor 3x3 com a área de velha
+2 - armazaner onde o click está sendo realizado
+
+area00: (140, 43)  inicial
+		(300, 181) final	
+		
+area01: (320, 43)  inicial
+		(480, 181) final
+area02: (500, 43)  inicial
+		(660, 181) final
+
+area10: (143, 200)(304, 343)
+area11: (320, 200)(483, 343)
+area12: (500, 200)(660, 347)
+
+area20: (144, 361)(302, 481)
+area21: (320, 361)(482, 486)
+area22: (500, 361)(652, 484)
+
+[(140,43),(300,181)]
+a tuple
+tenho dois parametro onde inicia a área e onde finaliza, cada uma
+com dois valores
+
+em um jogo da velha
+
+temos o objeto velha = #
+temos o objeto forma_geometrica = x e o
+
+130,100
+660,150
+
