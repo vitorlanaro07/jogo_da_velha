@@ -1,6 +1,6 @@
 import time
 import pygame as pg
-from application.Jogo_da_velha.modulos import botao, jogo
+from modulos import botao, velha, jogador
 import numpy as np
 
 #Criar janela e nome
@@ -21,10 +21,10 @@ imagem_espaco = pg.image.load("imagens/titulo.png").convert_alpha()
 #criar intancias
 botao_sair = botao.Botao(325, 500, imagem_botao_sair, 1)
 botao_voltar = botao.Botao(681, 540, imagem_botao_voltar, 0.8)
-velha_tabuleiro = jogo.Velha(50, 0, imagem_velha, 0.9)
+velha_tabuleiro = velha.Velha(50, 0, imagem_velha, 0.9)
 
-jogadorX = jogo.Jogador(imagem_cruz, True, "X")
-jogadorO = jogo.Jogador(imagem_circulo, False, "O")
+jogadorX = jogador.Jogador(imagem_cruz, True, "X")
+jogadorO = jogador.Jogador(imagem_circulo, False, "O")
 
 area00 = (120, 60)
 area01 = (300, 60)
@@ -66,7 +66,6 @@ coordenadas = 0
 
 while aplicacao_rodando:
 	janela.fill((202, 228, 241))
-
 	# Insere os botoes na tela
 	if (menu == "menu"):
 		janela.blit(imagem_espaco,(140,260))
@@ -78,18 +77,28 @@ while aplicacao_rodando:
 			time.sleep(0.1)
 			coordenadas = get_area(pg.mouse.get_pos())
 			time.sleep(0.1)
-			if jogadorX.vez:
-				jogadorX.coordenadas = coordenadas
-				print(jogadorX.get_id(), jogadorX.get_coordenadas())
-				jogadorX.vez = False
-				jogadorO.vez = True
-				velha_tabuleiro.get_surface().blit(jogadorX.get_surface(), jogadorX.get_coordenadas())
+			# preciso conferir as coordenadas já existentes na velha, se não existir eu incremento, se não, não realiza ação
+			existe = velha_tabuleiro.incrementa_coordenadas(coordenadas)
+			if not existe:
+				if jogadorX.vez:
+					jogadorX.incrementa_coordenadas(coordenadas)
+					print(jogadorX.get_id(), jogadorX.get_coordenadas())
+					jogadorX.vez = False
+					jogadorO.vez = True
+					velha_tabuleiro.get_surface().blit(jogadorX.get_surface(),coordenadas)
+				else:
+					jogadorO.incrementa_coordenadas(coordenadas)
+					print(jogadorO.get_id(), jogadorO.get_coordenadas())
+					jogadorO.vez = False
+					jogadorX.vez = True
+					velha_tabuleiro.get_surface().blit(jogadorO.get_surface(),coordenadas)
 			else:
-				jogadorO.coordenadas = coordenadas
-				print(jogadorO.get_id(), jogadorO.get_coordenadas())
-				jogadorO.vez = False
-				jogadorX.vez = True
-				velha_tabuleiro.get_surface().blit(jogadorO.get_surface(), jogadorO.get_coordenadas())
+				pass
+
+			if jogadorX.sera_que_ganhou():
+				print("Jogador X ganhou")
+			elif jogadorO.sera_que_ganhou():
+				print("Jogador O ganhou")
 
 		if botao_voltar.draw(janela):
 			menu = "menu"
