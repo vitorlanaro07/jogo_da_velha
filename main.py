@@ -2,10 +2,8 @@ import pygame as pg
 from modulos import botao, velha, jogador
 
 def jogo():
-
 	aplicacao_rodando = True
 	menu = "menu"
-	coordenadas = 0
 
 	janela = inicializa_tela()
 	botao_sair, botao_voltar = inicializa_botoes()
@@ -15,7 +13,6 @@ def jogo():
 
 	while aplicacao_rodando:
 		janela.fill((202, 228, 241))
-
 		if (menu == "menu"):
 			janela.blit(imagem_espaco, (140, 260))
 			velha_tabuleiro, jogadorX, jogadorO, jogador_o_ganhou, jogador_x_ganhou = inicia_novo_jogo(imagem_velha, imagem_cruz, imagem_circulo)
