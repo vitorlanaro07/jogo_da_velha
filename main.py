@@ -21,10 +21,6 @@ imagem_espaco = pg.image.load("imagens/titulo.png").convert_alpha()
 #criar intancias
 botao_sair = botao.Botao(325, 500, imagem_botao_sair, 1)
 botao_voltar = botao.Botao(681, 540, imagem_botao_voltar, 0.8)
-velha_tabuleiro = velha.Velha(50, 0, imagem_velha, 0.9)
-
-jogadorX = jogador.Jogador(imagem_cruz, True, "X")
-jogadorO = jogador.Jogador(imagem_circulo, False, "O")
 
 area00 = (120, 60)
 area01 = (300, 60)
@@ -35,6 +31,15 @@ area12 = (480, 220)
 area20 = (120, 370)
 area21 = (300, 370)
 area22 = (480, 370)
+
+vitoria1 = pg.image.load("imagens/ganhador_diagonal.png").convert_alpha() 			# (95,45)
+vitoria2 = pg.image.load("imagens/ganhador_diagonal_oposta.png").convert_alpha()	# (87,45)
+vitoria3 = pg.image.load("imagens/ganhador_vertical.png")							# (87, 105)
+vitoria4 = pg.image.load("imagens/ganhador_vertical.png")							# (87, 265)
+vitoria5 = pg.image.load("imagens/ganhador_vertical.png")  							# (87, 415)
+vitoria6 = pg.image.load("imagens/ganhador_horizontal.png")							# (170, 45)
+vitoria7 = pg.image.load("imagens/ganhador_horizontal.png")							# (350, 45)
+vitoria8 = pg.image.load("imagens/ganhador_horizontal.png")							# (530, 45)
 
 
 def get_area(click):
@@ -57,6 +62,26 @@ def get_area(click):
 	if 500 <= click[0] <= 652 and 361 <= click[1] <= 486:
 		return area22
 
+
+def get_vitoria(vitoria_tipo):
+	if vitoria_tipo == "vitoria_tipo_1":
+		return vitoria1, (95,45)
+	elif vitoria_tipo == "vitoria_tipo_2":
+		return vitoria2, (87,45)
+	elif vitoria_tipo == "vitoria_tipo_3":
+		return vitoria3, (87, 105)
+	elif vitoria_tipo == "vitoria_tipo_4":
+		return vitoria4, (87, 265)
+	elif vitoria_tipo == "vitoria_tipo_5":
+		return vitoria5, (87, 415)
+	elif vitoria_tipo == "vitoria_tipo_6":
+		return vitoria6, (170, 45)
+	elif vitoria_tipo == "vitoria_tipo_7":
+		return vitoria7, (350, 45)
+	elif vitoria_tipo == "vitoria_tipo_8":
+		return vitoria8, (530, 45)
+
+
 #Jogo
 aplicacao_rodando = True
 menu = "menu"
@@ -69,6 +94,11 @@ while aplicacao_rodando:
 	# Insere os botoes na tela
 	if (menu == "menu"):
 		janela.blit(imagem_espaco,(140,260))
+		velha_tabuleiro = velha.Velha(50, 0, imagem_velha, 0.9)
+		jogadorX = jogador.Jogador(imagem_cruz, True)
+		jogadorO = jogador.Jogador(imagem_circulo, False)
+		jogador_x_ganhou = None
+		jogador_o_ganhou = None
 		if botao_sair.draw(janela):
 			aplicacao_rodando = False
 	elif (menu == "jogo"):
@@ -77,31 +107,45 @@ while aplicacao_rodando:
 			time.sleep(0.1)
 			coordenadas = get_area(pg.mouse.get_pos())
 			time.sleep(0.1)
-			# preciso conferir as coordenadas já existentes na velha, se não existir eu incremento, se não, não realiza ação
-			existe = velha_tabuleiro.incrementa_coordenadas(coordenadas)
+			existe = velha_tabuleiro.incrementa_coordenadas(coordenadas)         # preciso conferir as coordenadas já existentes na velha, se não existir eu incremento, se não, não realiza ação
 			if not existe:
 				if jogadorX.vez:
 					jogadorX.incrementa_coordenadas(coordenadas)
-					print(jogadorX.get_id(), jogadorX.get_coordenadas())
+					print("X", jogadorX.get_coordenadas())
 					jogadorX.vez = False
 					jogadorO.vez = True
 					velha_tabuleiro.get_surface().blit(jogadorX.get_surface(),coordenadas)
 				else:
 					jogadorO.incrementa_coordenadas(coordenadas)
-					print(jogadorO.get_id(), jogadorO.get_coordenadas())
+					print("O", jogadorO.get_coordenadas())
 					jogadorO.vez = False
 					jogadorX.vez = True
 					velha_tabuleiro.get_surface().blit(jogadorO.get_surface(),coordenadas)
 			else:
 				pass
 
-			if jogadorX.sera_que_ganhou():
-				print("Jogador X ganhou")
-			elif jogadorO.sera_que_ganhou():
-				print("Jogador O ganhou")
+			try:
+				jogador_x_ganhou, vitoria_tipo = jogadorX.sera_que_ganhou()
+			except:
+				pass
+
+			try:
+				jogador_o_ganhou, vitoria_tipo = jogadorO.sera_que_ganhou()
+			except:
+				pass
+
+			if jogador_x_ganhou:
+				ganhou, coordenadas = get_vitoria(vitoria_tipo)
+				velha_tabuleiro.get_surface().blit(ganhou, coordenadas)
+			elif jogador_o_ganhou:
+				ganhou, coordenadas = get_vitoria(vitoria_tipo)
+				velha_tabuleiro.get_surface().blit(ganhou, coordenadas)
 
 		if botao_voltar.draw(janela):
 			menu = "menu"
+			jogadorX.coordenadas = []
+			jogadorO.coordenadas = []
+			velha_tabuleiro.coordenadas_das_jogadas = []
 
 	#event handler
 	for event in pg.event.get():

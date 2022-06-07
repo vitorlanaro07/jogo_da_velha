@@ -11,65 +11,67 @@ area21 = (300, 370)
 area22 = (480, 370)
 
 class Jogador():
-    def __init__(self, imagem, vez, id):
+    def __init__(self, imagem, vez):
         width = imagem.get_width()
         height = imagem.get_height()
         self.imagem = pg.transform.scale(imagem, (int(width * 0.85), int(height * 0.85)))
         self.coordenadas = []
-        self.clicou = False
         self.vez = vez
-        self.identificador = id
 
     # def sera_que_ganhou(self):
 
     def sera_que_ganhou(self):
         try:
-            if bool(self.coordenadas.index(area00) + 1) and bool(self.coordenadas.index(area01) + 1) and bool(self.coordenadas.index(area02) + 1):
-                return True
-        except:
-            pass
-
-        try:
             if bool(self.coordenadas.index(area00) + 1) and bool(self.coordenadas.index(area11) + 1) and bool(self.coordenadas.index(area22) + 1):
-                return True
+                return True, "vitoria_tipo_1"
+        except:
+            pass
+
+
+        try:
+            if bool(self.coordenadas.index(area02) + 1) and bool(self.coordenadas.index(area11) + 1) and bool(self.coordenadas.index(area20) + 1):
+                return True, "vitoria_tipo_2"
         except:
             pass
 
         try:
-            if bool(self.coordenadas.index(area00) + 1) and bool(self.coordenadas.index(area10) + 1) and bool(self.coordenadas.index(area20) + 1):
-                return True
-        except:
-            pass
-
-        try:
-            if bool(self.coordenadas.index(area01) + 1) and bool(self.coordenadas.index(area11) + 1) and bool(self.coordenadas.index(area21) + 1):
-                return True
-        except:
-            pass
-
-        try:
-            if bool(self.coordenadas.index(area02) + 1) and bool(self.coordenadas.index(area12) + 1) and bool(self.coordenadas.index(area22) + 1):
-                return True
+            if bool(self.coordenadas.index(area00) + 1) and bool(self.coordenadas.index(area01) + 1) and bool(self.coordenadas.index(area02) + 1):
+                return True, "vitoria_tipo_3"
         except:
             pass
 
         try:
             if bool(self.coordenadas.index(area10) + 1) and bool(self.coordenadas.index(area11) + 1) and bool(self.coordenadas.index(area12) + 1):
-                return True
+                return True, "vitoria_tipo_4"
         except:
             pass
 
         try:
             if bool(self.coordenadas.index(area20) + 1) and bool(self.coordenadas.index(area21) + 1) and bool(self.coordenadas.index(area22) + 1):
-                return True
+                return True, "vitoria_tipo_5"
         except:
             pass
 
         try:
-            if bool(self.coordenadas.index(area02) + 1) and bool(self.coordenadas.index(area11) + 1) and bool(self.coordenadas.index(area20) + 1):
-                return True
+            if bool(self.coordenadas.index(area00) + 1) and bool(self.coordenadas.index(area10) + 1) and bool(self.coordenadas.index(area20) + 1):
+                return True, "vitoria_tipo_6"
         except:
             pass
+
+        try:
+            if bool(self.coordenadas.index(area01) + 1) and bool(self.coordenadas.index(area11) + 1) and bool(self.coordenadas.index(area21) + 1):
+                return True, "vitoria_tipo_7"
+        except:
+            pass
+
+        try:
+            if bool(self.coordenadas.index(area02) + 1) and bool(self.coordenadas.index(area12) + 1) and bool(self.coordenadas.index(area22) + 1):
+                return True, "vitoria_tipo_8"
+        except:
+            pass
+
+
+
 
     def incrementa_coordenadas(self, nova_coordenada):
         try:
